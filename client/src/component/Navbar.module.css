@@ -1,0 +1,35 @@
+
+
+.container{
+    /* background-color: aqua; */
+    display: flex;
+    align-items: center;
+    font-family: "Geist", sans-serif;
+    justify-content: space-between;
+    margin: 0 auto;
+    width: 90%;
+    /* border: greenyellow solid 2px; */
+
+}
+.categories{
+    display: flex;
+    gap: 20px;
+    font-weight: 500;
+    font-size: 14px;
+    /* border: 2px dotted black; */
+    
+}
+.title{
+    font-weight: 600;
+    font-size: 16px;
+    color: #18181B;
+}
+.sync{
+    display: flex;
+    /* border: 2px yellow solid; */
+    align-items: center;
+}
+.options{
+    display: flex;
+    gap: 20px;
+}
