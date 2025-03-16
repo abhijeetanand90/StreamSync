@@ -19,7 +19,7 @@ export default function Navbar() {
        </div>
 
        <div className={styles.options}>
-        <input type="text" />
+        <input type="text" placeholder='Search streams, channels...' className={styles.searchBox}/>
        
        <CiSearch size={20}/>
        <MdNotificationsNone size={20}/>
