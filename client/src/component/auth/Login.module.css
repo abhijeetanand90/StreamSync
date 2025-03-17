@@ -1,0 +1,42 @@
+
+.container{
+    font-family: "Geist", sans-serif;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #0e0e10;;
+}
+.heading{
+    font-size: 24px;
+    font-weight: 600;
+}
+.fields{
+    display: flex;
+    flex-direction: column;
+}
+.input{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 6px;
+    background-color: #18181B;
+    border-color: transparent;
+    
+}
+.loginBtn{
+    padding: 5px 0;
+    color: #ADADB8;
+    background-color: #53535F61;
+    
+}
+.signupBtn{
+    padding: 5px 0;
+    color: #BF94FF;
+    font-size: 13px;
+    background-color: transparent;
+    border: none;
+    
+}
