@@ -7,6 +7,11 @@ export default function Signup() {
     email: "",
     password: "",
     username: "",
+    dateOfBirth: {
+      month: "",
+      day: "",
+      year: "",
+    },
   });
 
   const [Errors, setErrors] = useState({
@@ -127,7 +132,14 @@ export default function Signup() {
       setErrors({ ...Errors, email: res });
     }
   }
-  console.log(Errors);
+
+  function handleDateOfBirthChange(newDateOfBirth) {
+    setUser((prev) => ({
+      ...prev,
+      dateOfBirth: newDateOfBirth,
+    }));
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
     if (
@@ -135,9 +147,17 @@ export default function Signup() {
       Errors.email.length == 0 &&
       Errors.password.length == 0
     ) {
-      console.log("submitted");
+      // Check if date of birth is complete
+      const { month, day, year } = user.dateOfBirth;
+      if (!month || !day || !year) {
+        console.log("Please select your date of birth");
+        return;
+      }
+      console.log("submitted", user);
     }
   }
+
+  console.log(Errors);
 
   return (
     <div className={styles.container}>
@@ -184,7 +204,10 @@ export default function Signup() {
           <div className={styles.Dob}>
             <label htmlFor="">Date of Birth</label>
             <div>
-              <DateOfBirthDropdowns />
+              <DateOfBirthDropdowns
+                value={user.dateOfBirth}
+                onChange={handleDateOfBirthChange}
+              />
             </div>
           </div>
         </div>
@@ -211,7 +234,7 @@ export default function Signup() {
             color: "#ADADB8",
           }}
         >
-          By clicking Sign Up, you are agreeing to StreamSync’s Terms of Service
+          By clicking Sign Up, you are agreeing to StreamSync's Terms of Service
           and are acknowledging our Privacy Notice applies.
         </p>
         <button className={styles.loginBtn}>Have an account? Log in</button>

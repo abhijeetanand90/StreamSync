@@ -1,0 +1,24 @@
+.main{
+    display: flex;
+justify-content: space-between;
+}
+
+.featured{
+    display: flex;
+    gap: 20px;
+    font-family: "Geist", sans-serif;
+}
+.title{
+    color: #fff;
+}
+.name{
+    color: #fff;
+}
+.view{
+    color: #aaaaaa;
+}
+.subsection{
+    display: flex;
+    font-size: smaller;
+    gap: 14px;
+}

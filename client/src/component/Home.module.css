@@ -5,18 +5,14 @@
 .heading {
   font-size: 60px;
   line-height: 1;
-
+color: #ffffff;
   font-weight: 700;
   text-align: center;
 }
 
 .header {
-  background-image: linear-gradient(
-    to bottom,
-    rgba(203, 185, 227, 0.7),
-    #ffffff
-  );
-  padding: 30px 10px;
+  background-image: linear-gradient(to bottom, rgba(94, 58, 148, 0.7) 0%, #0f0f0f 100%);
+  padding: 40px 10px;
 }
 
 .mainPara {
@@ -31,6 +27,7 @@
   display: flex;
   gap: 20px;
   justify-content: center;
+  margin-top: 10px;
   
 }
 .Browse {
@@ -57,4 +54,9 @@
   border: hsl(240, 5.9%, 90%) solid 1px;
   border-radius: 6px;
   cursor: pointer;
+}
+
+.Hero{
+  max-width: 90%;
+  margin: 0 auto;
 }
