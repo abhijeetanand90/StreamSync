@@ -18,6 +18,8 @@ app.use(
   })
 );
 
+app.use('/api/users', userRoutes);
+
 const CONNECTION_URL = process.env.CONNECTION_URL;
 mongoose
   .connect(CONNECTION_URL)

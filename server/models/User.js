@@ -17,6 +17,10 @@ const userSchema=mongoose.Schema({
     profile_pic:{type:String},
     streamKey:{type:String},
     createdAt:{type:Date},
+    loginCount:{
+        type:Number,
+        default:0
+    }
     
 
 })

@@ -1,5 +1,7 @@
 import express from "express";
-import User from "../models/User";
+import User from "../models/User.js";
+import { ApiRateLimiter } from "../middleware/authMiddleware.js";
+import { login } from "../controllers/authController.js";
 
 const router=express.Router();
 
@@ -17,5 +19,7 @@ router.post('/test-validation', async(req, res)=>{
           });
     }
 })
+
+router.post("/login",ApiRateLimiter,login );
 
 export default router;
