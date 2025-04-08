@@ -1,25 +1,20 @@
 import express from "express";
-import User from "../models/User.js";
-import { ApiRateLimiter } from "../middleware/authMiddleware.js";
-import { login } from "../controllers/authController.js";
+// import { verifyToken } from "../middleware/authMiddleware.js";
+// Import user controller functions here when created
 
-const router=express.Router();
+const router = express.Router();
 
+// // Protected user routes
+// router.get("/profile", verifyToken, (req, res) => {
+//   // Get user profile
+// });
 
-router.post('/test-validation', async(req, res)=>{
-    try {
-       const user=new User(req.body) ;
-       await user.validate();
-       res.json({valid:true});
-    } catch (error) {
+// router.put("/profile", verifyToken, (req, res) => {
+//   // Update user profile
+// });
 
-        res.json({ 
-            valid: false, 
-            errors: error.errors 
-          });
-    }
-})
-
-router.post("/login",ApiRateLimiter,login );
+// router.put("/settings", verifyToken, (req, res) => {
+//   // Update user settings
+// });
 
 export default router;

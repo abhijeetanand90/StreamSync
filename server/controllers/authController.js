@@ -6,7 +6,11 @@ import xss from "xss";
 
 dotenv.config();
 
-import User from "../models/User";
+import User from "../models/User.js";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../middleware/authMiddleware.js";
 
 export const signup = async (req, res) => {
   // 1. Get and sanitize inputs
@@ -38,17 +42,22 @@ export const signup = async (req, res) => {
       password: hashedPassword,
       username,
     });
-    const token = jwt.sign(
-      { email: result.email, id: result._id },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "1h",
-      }
-    );
+
+    const accessToken = generateAccessToken(result);
+    const refreshToken = generateRefreshToken(result);
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+      path: "/api/auth/refresh",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
     res.status(201).json({
       message: "User is created",
       user: { email: result.email, username: result.username },
-      token,
+      accessToken,
     });
   } catch (error) {
     res
@@ -79,15 +88,73 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid Credentials" });
     }
 
-    const token = jwt.sign(
-      { email: existingUser.email, id: existingUser._id },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
-    );
-    res.status(200).json({ token });
+    const accessToken = generateAccessToken(existingUser);
+    const refreshToken = generateRefreshToken(existingUser);
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // Match refresh function
+
+      // sameSite: "Strict",
+      path: "/api/auth/refresh",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    res.status(200).json({ accessToken });
   } catch (error) {
     res
       .status(500)
       .json({ message: "Something went wrong", error: error.message });
   }
+};
+
+export const logout = async (req, res) => {
+  try {
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/api/auth/refresh",
+      sameSite: "Strict",
+    });
+
+    res.json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    console.error("Logout error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error during logout",
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
+    });
+  }
+};
+
+export const refresh = async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+  if (!refreshToken) return res.sendStatus(401);
+
+  jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, (err, user) => {
+    if (err) {
+      return res.sendStatus(403);
+    }
+
+    const newRefreshToken = generateRefreshToken(user);
+    const newAccessToken = generateAccessToken(user);
+
+    res.cookie("refreshToken", newRefreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/api/auth/refresh",
+      sameSite: "Strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    // Yes, setting the path for the cookie is a good practice, especially to control where the cookie is sent. By default, cookies are only sent to the same path where they were set.
+
+    res.json({
+      message: "Tokens refreshed successfully",
+      accessToken: newAccessToken,
+    });
+  });
 };

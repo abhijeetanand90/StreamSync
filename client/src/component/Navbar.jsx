@@ -2,8 +2,18 @@ import styles from './Navbar.module.css'
 import { CiSearch } from "react-icons/ci";
 import { MdNotificationsNone } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
+import { useState } from 'react';
+import DropDown from './auth/DropDown';
 
 export default function Navbar() {
+
+  const[showDialog,setShowDialog]=useState(false);
+
+  function handleClick(){
+      setShowDialog(prev=>!prev);
+  }
+
+
   return (
     <div className={styles.container}>
         <div className={styles.sync}>
@@ -23,9 +33,9 @@ export default function Navbar() {
        
        <CiSearch size={20}/>
        <MdNotificationsNone size={20}/>
-       <FaUserCircle size={22} />
+       <FaUserCircle size={22} onClick={handleClick}/>
        </div>
-
+{showDialog && <DropDown />}
     </div>
   )
 }
