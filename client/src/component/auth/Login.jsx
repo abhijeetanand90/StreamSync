@@ -13,7 +13,7 @@ export default function Login() {
     username: "",
   });
 
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
 
   function handleChange(e) {
     const { value, name } = e.target;
@@ -24,10 +24,13 @@ export default function Login() {
     e.preventDefault();
     try {
       const result = await login(user).unwrap();
-    
+
       // Handle successful login
       console.log("Login successful:", result);
-      dispatch(setCredentials({accessToken:result, user:user.username}))
+
+      console.log("Access Token:", result.accessToken);
+      console.log("Refresh Token:", document.cookie);
+      dispatch(setCredentials({ accessToken: result, user: user.username }));
       navigate("/"); // Redirect to home page
     } catch (err) {
       console.error("Login failed:", err);

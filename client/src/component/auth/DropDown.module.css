@@ -1,0 +1,15 @@
+.main{
+    position: absolute;
+    top: 40px;
+    right: 0px;
+    z-index: 100;
+    /* border: 2px solid green; */
+    background-color: #0e0e10;
+    align-items: flex-start;
+}
+
+.DropDown{
+    display: flex;
+    gap: 12px;
+   
+}

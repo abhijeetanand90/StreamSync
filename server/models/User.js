@@ -20,6 +20,14 @@ const userSchema=mongoose.Schema({
     loginCount:{
         type:Number,
         default:0
+    },
+    dateOfBirth:{
+        type:{
+            month:{type:Number,required:true, min : 1, max:12 },
+            day:{type:Number,required:true, min:1, max :31},
+            year:{type:Number,required:true, min:1990, max: new Date().getFullYear() - 13},
+        }, 
+        required:true
     }
     
 

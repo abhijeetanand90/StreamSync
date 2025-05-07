@@ -33,7 +33,7 @@ export default function Navbar() {
        
        <CiSearch size={20}/>
        <MdNotificationsNone size={20}/>
-       <FaUserCircle size={22} onClick={handleClick}/>
+       <FaUserCircle size={22} onClick={handleClick} className={styles.avatar}/>
        </div>
 {showDialog && <DropDown />}
     </div>

@@ -17,16 +17,21 @@ export const signup = async (req, res) => {
   const email = xss(req.body.email?.trim().toLowerCase());
   const username = xss(req.body.username?.trim());
   const password = req.body.password;
+  const dateOfBirth = req.body.dateOfBirth;
+
+  console.log("Processed signup data:", { email, username, dateOfBirth });
 
   try {
-    if (!email || !password || !username) {
+    if (!email || !password || !username || !dateOfBirth) {
       return res.status(400).json({ message: "All fields are required" });
     }
     const existinguser = await User.findOne({ email });
     if (existinguser) {
       return res.status(409).json({ message: "User already exist" });
     }
-
+    if (!dateOfBirth.month || !dateOfBirth.day || !dateOfBirth.year) {
+      return res.status(400).json({ message: "Date of birth is incomplete" });
+    }
     const existingUsername = await User.findOne({ username });
     if (existingUsername) {
       return res.status(409).json({ message: "Username already taken" });
@@ -37,10 +42,30 @@ export const signup = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
+    const userData = {
+      email,
+      password: hashedPassword,
+      username,
+      dateOfBirth: {
+        month: parseInt(dateOfBirth.month),
+        day: parseInt(dateOfBirth.day),
+        year: parseInt(dateOfBirth.year),
+      },
+    };
+    console.log("Attempting to create user with data:", {
+      ...userData,
+      password: "[REDACTED]",
+    });
+
     const result = await User.create({
       email,
       password: hashedPassword,
       username,
+      dateOfBirth: {
+        month: parseInt(dateOfBirth.month),
+        day: parseInt(dateOfBirth.day),
+        year: parseInt(dateOfBirth.year),
+      },
     });
 
     const accessToken = generateAccessToken(result);
@@ -56,7 +81,11 @@ export const signup = async (req, res) => {
 
     res.status(201).json({
       message: "User is created",
-      user: { email: result.email, username: result.username },
+      user: {
+        email: result.email,
+        username: result.username,
+        dateOfBirth: result.dateOfBirth,
+      },
       accessToken,
     });
   } catch (error) {
@@ -77,7 +106,7 @@ export const login = async (req, res) => {
   try {
     const existingUser = await User.findOne({ username });
     if (!existingUser) {
-      return res.status(404).json({ message: "Invalid Credentials" });
+      return res.status(404).json({ message: "User already exist" });
     }
 
     const isPasswordCorrect = await bcrypt.compare(

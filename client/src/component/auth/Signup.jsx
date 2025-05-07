@@ -1,6 +1,11 @@
 import { useState } from "react";
 import DateOfBirthDropdowns from "./DateOfBirthDropdowns";
 import styles from "./Signup.module.css";
+import { useSignupMutation } from "../../redux/features/authApiSlice";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../../redux/features/auth";
+import { useNavigate } from "react-router-dom"; // Add this at the top
+
 
 export default function Signup() {
   const [user, setUser] = useState({
@@ -14,11 +19,16 @@ export default function Signup() {
     },
   });
 
+  const navigate= useNavigate();
+  const dispatch=useDispatch();
+
   const [Errors, setErrors] = useState({
     password: [],
     email: [],
     username: [],
   });
+
+  const [signup, { isLoading, error }] = useSignupMutation();
 
   function isEmailValid(email) {
     const errors = [];
@@ -140,7 +150,7 @@ export default function Signup() {
     }));
   }
 
-  function handleSubmit(e) {
+  async function  handleSubmit(e) {
     e.preventDefault();
     if (
       Errors.username.length == 0 &&
@@ -153,11 +163,45 @@ export default function Signup() {
         console.log("Please select your date of birth");
         return;
       }
-      console.log("submitted", user);
+      try{
+        console.log("Starting signup process...");
+        console.log("Signup request data:", {
+          email: user.email,
+          username: user.username,
+          password: user.password,
+          dateOfBirth: user.dateOfBirth
+        });
+      const result = await signup(user).unwrap();
+      console.log("Signup successful!");
+      console.log("Access Token:", result.accessToken);
+      console.log("Refresh Token:", document.cookie);
+
+     
+      dispatch(setCredentials({
+        user:{ 
+          email:result.user.email,
+          username:result.user.username,
+          dateOfBirth:result.user.dateOfBirth
+        },
+        accessToken: result.accessToken
+      }));
+      console.log("Credentials dispatched, attempting navigation...");
+      navigate("/",{ replace: true });
+      }
+      catch (err) {
+         // Add more detailed error logging
+         if (err.name !== 'NavigationDuplicated') {
+          console.error("Signup failed with error:", {
+            status: err.status,
+            data: err.data,
+            message: err.data?.message || err.message,
+            error: err.data?.error || err.error
+          });
+        }
+      }
+     
     }
   }
-
-  console.log(Errors);
 
   return (
     <div className={styles.container}>
