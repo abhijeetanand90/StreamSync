@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from './Home.module.css'
 import FeaturedStream from './Stream/FeaturedStream'
+import { Link } from 'react-router'
 export default function Home() {
   return (
     <div className={styles.main}>
@@ -9,7 +10,7 @@ export default function Home() {
         <p className={styles.mainPara}>Watch your favorite streamers, discover new content, and connect with a community of passionate viewers.</p>
         <div className={styles.mainButton}>
           <button className={styles.Browse}>Browse Streams</button>
-          <button className={styles.Start}>Start Streaming</button>
+         <Link to="/stream"><button className={styles.Start}>Start Streaming</button></Link> 
         </div>
       </div>
       <div className={styles.Hero}>

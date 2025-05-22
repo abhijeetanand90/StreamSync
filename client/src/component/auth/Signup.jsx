@@ -172,9 +172,10 @@ export default function Signup() {
           dateOfBirth: user.dateOfBirth
         });
       const result = await signup(user).unwrap();
+      
       console.log("Signup successful!");
       console.log("Access Token:", result.accessToken);
-      console.log("Refresh Token:", document.cookie);
+      console.log("Refresh Token:", result.refreshToken);
 
      
       dispatch(setCredentials({

@@ -87,6 +87,7 @@ export const signup = async (req, res) => {
         dateOfBirth: result.dateOfBirth,
       },
       accessToken,
+      refreshToken
     });
   } catch (error) {
     res
@@ -128,7 +129,7 @@ export const login = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    res.status(200).json({ accessToken });
+    res.status(200).json({ accessToken, refreshToken });
   } catch (error) {
     res
       .status(500)

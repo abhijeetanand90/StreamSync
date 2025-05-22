@@ -29,7 +29,7 @@ export default function Login() {
       console.log("Login successful:", result);
 
       console.log("Access Token:", result.accessToken);
-      console.log("Refresh Token:", document.cookie);
+      console.log("Refresh Token:", result.refreshToken);
       dispatch(setCredentials({ accessToken: result, user: user.username }));
       navigate("/"); // Redirect to home page
     } catch (err) {
