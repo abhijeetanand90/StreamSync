@@ -1,16 +1,15 @@
 import styles from "./StreamPage.module.css";
-import Webcam from "react-webcam"
+
 
 export default function StreamPage() {
+
+
   return (
     <>
       <div className={styles.container}>
         <div className={styles.channelLayout}>
            <h3>Channel Name</h3>
-           {/* <Webcam
-           height={600}
-           width={1000}
-            />  */}
+         
             </div>
 
         <div className={styles.activity}>

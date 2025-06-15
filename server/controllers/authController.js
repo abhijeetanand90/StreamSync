@@ -105,9 +105,10 @@ export const login = async (req, res) => {
   }
 
   try {
+    
     const existingUser = await User.findOne({ username });
     if (!existingUser) {
-      return res.status(404).json({ message: "User already exist" });
+      return res.status(401).json({ message: "Invalid Credentials" });
     }
 
     const isPasswordCorrect = await bcrypt.compare(
@@ -129,7 +130,13 @@ export const login = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    res.status(200).json({ accessToken, refreshToken });
+    const response={accessToken}
+      if (process.env.NODE_ENV !== 'production') {
+        response.refreshToken = refreshToken; // Debug only
+      }
+
+        res.status(200).json(response);
+    
   } catch (error) {
     res
       .status(500)

@@ -6,13 +6,12 @@ import userRoutes from "./routes/userRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
-
-
+import helmet from "helmet";
 
 dotenv.config();
 
 const PORT = process.env.PORT;
-const server=createServer()
+const server = createServer();
 const io = new Server(server);
 
 const app = express();
@@ -27,15 +26,13 @@ app.use(
 );
 
 
-
-io.on('connection', (socket) => {
-  console.log('a user connected');
+io.on("connection", (socket) => {
+  console.log("a user connected");
 });
 
 server.listen(3000, () => {
-  console.log('socket listening on *:3000');
-})
-
+  console.log("socket listening on *:3000");
+});
 
 // Mount routes
 app.use("/api/auth", authRoutes); // Authentication routes
